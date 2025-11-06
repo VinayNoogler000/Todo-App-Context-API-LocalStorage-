@@ -4,30 +4,7 @@ import { TodoContextProvider } from "./contexts"
 import {TodoForm, TodoItem} from "./components"
 
 function App() {
-  const [todos, setTodos] = useState(() => {
-    if (localStorage.getItem("todos") === null) {
-      return [
-        {
-            id: 1,
-            todo: "Eat",
-            isCompleted: false,
-        },
-        {
-            id: 2,
-            todo: "Sleep",
-            isCompleted: false,
-        },
-        {
-            id: 3,
-            todo: "Code",
-            isCompleted: false,
-        }
-      ];
-    }
-    else {
-      return JSON.parse(localStorage.getItem("todos"));
-    }
-  });
+  const [todos, setTodos] = useState([]);
 
   const addTodo = (todo) => {
     setTodos((prevTodos) => [{...todo}, ...prevTodos]);
@@ -55,7 +32,28 @@ function App() {
   useEffect(() => {
     const todos = JSON.parse(localStorage.getItem("todos"));
 
-    if (todos && todos.length > 0) setTodos(todos);
+    if (todos === null) { //if locally stored todos empty, then add 3 default todos
+      setTodos([
+        {
+            id: 1,
+            todo: "Eat",
+            isCompleted: false,
+        },
+        {
+            id: 2,
+            todo: "Sleep",
+            isCompleted: false,
+        },
+        {
+            id: 3,
+            todo: "Code",
+            isCompleted: false,
+        }
+      ]);
+    }
+    else if (todos && todos.length > 0) {
+      setTodos(todos);
+    }
   }, []);
 
   useEffect(() => {
